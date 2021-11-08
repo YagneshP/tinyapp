@@ -9,6 +9,10 @@ const urlDatabase = {
 
 app.get('/', (req,res) => {
   res.send('Hello World');
+});
+
+app.get('/urls.json', (req, res) => {
+  res.json(urlDatabase);
 })
 
 //Server Listen
