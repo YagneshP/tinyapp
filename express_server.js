@@ -4,7 +4,14 @@ const PORT = 8080;
 app.set('view engine','ejs');
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-
+function generateRandomString() {
+  var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var result = '';
+  for (var i = 0; i < 6; i++) {
+     result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+  }
+  return result;
+}
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
