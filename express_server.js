@@ -16,54 +16,78 @@ const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+/**
+ * Routes
+ */
 
+/** 
+ *  GET '/' --> Home
+ */
 app.get('/', (req,res) => {
   res.send('Hello World');
 });
-
+/** 
+ *  GET '/urls.json' --> json urlDatabase
+ */
 app.get('/urls.json', (req, res) => {
   res.json(urlDatabase);
 });
-
+/** 
+ *  GET '/urls' --> index page of URLs
+ */
 app.get('/urls', (req,res) => {
   const templateVars = {urls : urlDatabase};
   res.render('urls_index', templateVars);
 });
-
+/** 
+ *  POST '/urls' --> Create new url
+ */
 app.post('/urls', (req, res) => {
   const newShortUrl = generateRandomString();
   urlDatabase[newShortUrl] = req.body.longURL;
   res.redirect(`/urls/${newShortUrl}`)
 });
-
+/** 
+ *  GET '/urls/new' --> Read New URLForm
+ */
 app.get('/urls/new', (req, res) => {
   res.render('urls_new');
 } )
-
+/** 
+ *  GET '/urls/:id' --> Read Show Page of particular url
+ */
 app.get('/urls/:shortURL', (req,res) => {
   const shortURL = req.params.shortURL;
   const longURL = urlDatabase[shortURL];
   res.render('urls_show', {shortURL, longURL});
 });
-
+/** 
+ *  POST '/urls/:shortURL' --> Update Url
+ */
 app.post('/urls/:shortURL', (req,res) => {
   const shortURL = req.params.shortURL;
   const longURL = req.body.longURL;
   urlDatabase[shortURL] = longURL;
   res.redirect("/urls");
 })
-
+/** 
+ *  GET '/u/:shortURL' --> Redirect to longURL
+ */
 app.get('/u/:shortURL', (req,res) => {
   const longURL = urlDatabase[req.params.shortURL];
   res.redirect(longURL);
 });
-
+/** 
+ *  POST '/urls/:shortURL' --> Delete URL
+ */
 app.post('/urls/:shortURL/delete', (req, res) => {
   const shortURL = req.params.shortURL;
   delete urlDatabase[shortURL];
   res.redirect('/urls');
 });
-
+/** 
+ *  GET '/hello' --> sending HTML data
+ */
 app.get('/hello', (req,res) => {
   res.send('<html><body>Hello <b>World</b></body></html>');
 });
