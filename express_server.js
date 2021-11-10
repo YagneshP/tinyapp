@@ -19,8 +19,8 @@ function generateRandomString() {
 }
 
 function checkEmail(email) {
-  for(let user in user) {
-    if(user[email] === email) {
+  for(let user in users) {
+    if(users[user]['email'] === email) {
       return true;
     }
   }
