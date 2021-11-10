@@ -97,6 +97,13 @@ app.get('/urls', (req,res) => {
 });
 
 /** 
+ *  GET '/login' --> render login form
+ */
+ app.get('/login', (req,res) => {
+  res.render('logInform');
+});
+
+/** 
  *  POST '/register' --> render Registration form
  */
  app.post('/register', (req,res) => {
