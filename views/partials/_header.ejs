@@ -10,13 +10,16 @@
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>
     </div>
-    <form class="d-flex" method="POST" action="/login">
-      <% if(username) { %>
+    <% if(username) { %>
+      <form class="d-flex" method="POST" action="/logout">
         <h5 class="my-2">Logged In As: <%= username %> </h5>
-      <% } else { %>
+        <button class="btn btn-outline-secondary mx-3" type="submit">Logout</button>
+      </form>
+    <% } else { %>
+      <form class="d-flex" method="POST" action="/login">
         <input class="form-control me-2" type="text" name="username" placeholder="Username" aria-label="username">
-      <% } %>
-      <button class="btn btn-outline-secondary mx-3" type="submit">Login</button>
-    </form>
+        <button class="btn btn-outline-secondary mx-3" type="submit">Login</button>
+      </form>
+    <% } %>
   </nav>
 </header>
