@@ -18,10 +18,10 @@ function generateRandomString() {
   return result;
 }
 
-function checkEmail(email) {
+function checkUserWithEmail(email) {
   for(let user in users) {
     if(users[user]['email'] === email) {
-      return true;
+      return users[user];
     }
   }
   return false;
@@ -76,7 +76,10 @@ app.get('/urls', (req,res) => {
  *  POST '/login' --> login user by setting cookie
  */
  app.post('/login', (req,res) => {
-  const username = req.body.username;
+  const {email,password} = req.body;
+  if(checkEmail){
+
+  }
   res.cookie('username', username);
   res.redirect('/urls');
 });
@@ -110,7 +113,7 @@ app.get('/urls', (req,res) => {
   //create user object
   const {email, password} = req.body;
   if(email && password) {
-    if (!checkEmail(email)) {
+    if (!checkUserWithEmail(email)) {
       const id = generateRandomString();
       const user = {id, email, password};
       users[id] = user;
