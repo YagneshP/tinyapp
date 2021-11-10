@@ -45,7 +45,7 @@ app.get('/urls', (req,res) => {
 });
 
 /** 
- *  POST '/login' --> login user
+ *  POST '/login' --> login user by setting cookie
  */
  app.post('/login', (req,res) => {
   const username = req.body.username;
@@ -53,7 +53,13 @@ app.get('/urls', (req,res) => {
   res.redirect('/urls');
 });
 
-
+/** 
+ *  POST '/logout' --> logout user by clear cookie
+ */
+ app.post('/logout', (req,res) => {
+  res.clearCookie('username');
+  res.redirect('/urls');
+});
 
 
 /** 
