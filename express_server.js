@@ -18,6 +18,14 @@ function generateRandomString() {
   return result;
 }
 
+function checkEmail(email) {
+  for(let user in user) {
+    if(user[email] === email) {
+      return true;
+    }
+  }
+  return false;
+}
 //userDatabase
 const users = { 
   "userRandomID": {
@@ -94,11 +102,14 @@ app.get('/urls', (req,res) => {
  app.post('/register', (req,res) => {
   //create user object
   const {email, password} = req.body;
-  const id = generateRandomString();
-  const user = {id, email, password};
-  users[id] = user;
-  res.cookie('user_id', id);
-  res.redirect('/urls');
+  if (!checkEmail(email)) {
+    const id = generateRandomString();
+    const user = {id, email, password};
+    users[id] = user;
+    res.cookie('user_id', id);
+    return res.redirect('/urls');
+  }
+  return res.status(400).redirect("/urls");
 });
 
 
