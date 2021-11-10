@@ -16,10 +16,17 @@
         <button class="btn btn-outline-secondary mx-3" type="submit">Logout</button>
       </form>
     <% } else { %>
-      <form class="d-flex" method="POST" action="/login">
-        <input class="form-control me-2" type="text" name="username" placeholder="Username" aria-label="username">
-        <button class="btn btn-outline-secondary mx-3" type="submit">Login</button>
-      </form>
+      <div class="navbar-nav">
+        <ul class="nav justify-content-end">
+          <li class="nav-item">
+            <a class="nav-link "  href="/login">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="/register">Register</a>
+          </li>
+        </ul>
+      </div>
+
     <% } %>
   </nav>
 </header>
