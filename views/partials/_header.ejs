@@ -11,7 +11,11 @@
       </div>
     </div>
     <form class="d-flex" method="POST" action="/login">
-      <input class="form-control me-2" type="text" name="username" placeholder="Username" aria-label="username">
+      <% if(username) { %>
+        <h5 class="my-2">Logged In As: <%= username %> </h5>
+      <% } else { %>
+        <input class="form-control me-2" type="text" name="username" placeholder="Username" aria-label="username">
+      <% } %>
       <button class="btn btn-outline-secondary mx-3" type="submit">Login</button>
     </form>
   </nav>
