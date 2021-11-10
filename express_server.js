@@ -112,7 +112,7 @@ app.get('/urls', (req,res) => {
       return res.redirect('/urls');
     };
     console.log("if email exist Users :", users)
-    return res.status(400).send('Bad request');
+    return res.status(400).send('Email already exists');
   }
   return res.status(400).send('email and password can not be empty');
 });
