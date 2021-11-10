@@ -2,10 +2,13 @@ const express = require('express');
 const app = express();
 const cookieParser = require('cookie-parser');
 const PORT = 8080;
+
 app.set('view engine','ejs');
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser()) // using cookieParser middleware
+
+//random string generator
 function generateRandomString() {
   var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   var result = '';
@@ -15,13 +18,29 @@ function generateRandomString() {
   return result;
 }
 
+//userDatabase
+const users = { 
+  "userRandomID": {
+    id: "userRandomID", 
+    email: "user@example.com", 
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID", 
+    email: "user2@example.com", 
+    password: "dishwasher-funk"
+  }
+}
+//urlDataBase
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+
 /**
  * Routes
  */
+
 
 /** 
  *  GET '/' --> Home
@@ -62,12 +81,24 @@ app.get('/urls', (req,res) => {
 });
 
 /** 
- *  GET '/registration' --> render Registration form
+ *  GET '/register' --> render Registration form
  */
- app.get('/registration', (req,res) => {
+ app.get('/register', (req,res) => {
   res.render('registrationForm');
 });
 
+/** 
+ *  POST '/register' --> render Registration form
+ */
+ app.post('/register', (req,res) => {
+  //create user object
+  const {email, password} = req.body;
+  const id = generateRandomString();
+  const user = {id, email, password};
+  users[id] = user;
+  res.cookie('user_id', id);
+  res.redirect('/urls');
+});
 
 
 /** 
