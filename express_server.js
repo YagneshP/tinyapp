@@ -61,6 +61,14 @@ app.get('/urls', (req,res) => {
   res.redirect('/urls');
 });
 
+/** 
+ *  GET '/registration' --> render Registration form
+ */
+ app.get('/registration', (req,res) => {
+  res.render('registrationForm');
+});
+
+
 
 /** 
  *  POST '/urls' --> Create new url
