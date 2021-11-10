@@ -58,8 +58,9 @@ app.get('/urls.json', (req, res) => {
  *  GET '/urls' --> index page of URLs
  */
 app.get('/urls', (req,res) => {
-  const username = req.cookies['username'];
-  const templateVars = {urls : urlDatabase, username };
+  const userId = req.cookies['user_id'];
+  const user = users[userId];
+  const templateVars = {urls : urlDatabase, user};
   res.render('urls_index', templateVars);
 });
 
@@ -113,17 +114,19 @@ app.post('/urls', (req, res) => {
  *  GET '/urls/new' --> Read New URLForm
  */
 app.get('/urls/new', (req, res) => {
-  const username = req.cookies['username'];
-  res.render('urls_new',{username});
+  const userId = req.cookies['user_id'];
+  const user = users[userId];
+  res.render('urls_new',{user});
 } )
 /** 
  *  GET '/urls/:id' --> Read Show Page of particular url
  */
 app.get('/urls/:shortURL', (req,res) => {
-  const username = req.cookies['username'];
+  const userId = req.cookies['user_id'];
+  const user = users[userId];
   const shortURL = req.params.shortURL;
   const longURL = urlDatabase[shortURL];
-  res.render('urls_show', {shortURL, longURL,username});
+  res.render('urls_show', {shortURL, longURL,user});
 });
 /** 
  *  POST '/urls/:shortURL' --> Update Url
