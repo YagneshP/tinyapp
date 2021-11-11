@@ -213,8 +213,11 @@ app.post('/urls/:shortURL', (req,res) => {
  *  GET '/u/:shortURL' --> Redirect to longURL
  */
 app.get('/u/:shortURL', (req,res) => {
-  const longURL = urlDatabase[req.params.shortURL];
-  res.redirect(longURL);
+  if(!urlDatabase.hasOwnProperty(req.params.shortURL)){
+    const {longURL} = urlDatabase[req.params.shortURL];
+    return res.redirect(longURL);
+  }
+  return res.send('shortURL doesnt exist');
 });
 /** 
  *  POST '/urls/:shortURL' --> Delete URL
