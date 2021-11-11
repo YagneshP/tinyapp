@@ -39,15 +39,10 @@ function urlsForUser(id) {
 }
 //userDatabase
 const users = { 
-  "userRandomID": {
-    id: "userRandomID", 
-    email: "user@example.com", 
-    password: "purple-monkey-dinosaur"
-  },
- "user2RandomID": {
-    id: "user2RandomID", 
-    email: "user2@example.com", 
-    password: "dishwasher-funk"
+  "JqeVGE": {
+    id: 'JqeVGE',
+    email: 'test@test.com',
+    password: '$2a$10$0NRCRUOpGjbBnpgjQPQdc.wkunDCEEMvBJihg4trciirAOLs8VYMe'
   }
 }
 //urlDataBase
@@ -100,7 +95,9 @@ app.get('/urls', (req,res) => {
   if(email && password){
     const user  = checkUserWithEmail(email);
     if (user) {
-      const isCorrectPassword = bcrypt.compareSync(password, hashedPassword)
+      console.log('login user:', user);
+
+      const isCorrectPassword = bcrypt.compareSync(password, user['password']);
       if (isCorrectPassword) {
         res.cookie('user_id', user['id']);
         return res.redirect('/urls');
@@ -151,9 +148,10 @@ app.get('/urls', (req,res) => {
       const id = generateRandomString();
       //hashing password
       const hashedPassword = bcrypt.hashSync(password, 10);
-
       const user = {id, email, password:hashedPassword};
+      console.log('Register user:', user);
       users[id] = user;
+      console.log('Register Users:', users)
       res.cookie('user_id', id);
       return res.redirect('/urls');
     };
