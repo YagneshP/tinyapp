@@ -100,14 +100,18 @@ app.get('/urls', (req,res) => {
  *  GET '/register' --> render Registration form
  */
  app.get('/register', (req,res) => {
-  res.render('registrationForm');
+  const userId = req.cookies['user_id'];
+  const user = users[userId];
+  res.render('registrationForm',{user});
 });
 
 /** 
  *  GET '/login' --> render login form
  */
  app.get('/login', (req,res) => {
-  res.render('logInform');
+  const userId = req.cookies['user_id'];
+  const user = users[userId];
+  res.render('logInform',{user});
 });
 
 /** 
