@@ -205,6 +205,7 @@ app.post('/urls/:shortURL', (req,res) => {
       urlDatabase[shortURL] = {longURL,userID};
       return res.redirect("/urls");
     }
+    return res.send('shortUrl not found!');
   }
   return res.send('Unauthorized user');
 })
