@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const cookieSession = require('cookie-session');
 const bcrypt = require('bcryptjs');
+const checkUserWithEmail = require('./helper');
 const PORT = 8080;
 
 app.set('view engine','ejs');
@@ -20,14 +21,6 @@ function generateRandomString() {
      result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
   }
   return result;
-}
-
-function checkUserWithEmail(email, db) {
-  for(let user in db) {
-    if(db[user]['email'] === email) {
-      return db[user];
-    }
-  }
 }
 
 function urlsForUser(id) {
