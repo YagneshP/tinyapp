@@ -77,15 +77,18 @@ app.get('/urls', (req,res) => {
  */
  app.post('/login', (req,res) => {
   const {email,password} = req.body;
-  const user  = checkUserWithEmail(email);
-  if (user) {
-    if (user["password"] === password) {
-      res.cookie('user_id', user['id']);
-      return res.redirect('/urls');
+  if(email && password){
+    const user  = checkUserWithEmail(email);
+    if (user) {
+      if (user["password"] === password) {
+        res.cookie('user_id', user['id']);
+        return res.redirect('/urls');
+      }
+      return res.status(403).send(`Password doesn't match`);
     }
-    return res.status(403).send(`Password doesn't match`);
+    return res.status(403).send('Email not found');
   }
-  return res.status(403).send('Email not found');
+  return res.status(400).send('email and password can not be empty');
 });
 
 /** 
