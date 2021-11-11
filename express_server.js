@@ -196,9 +196,12 @@ app.get('/urls/:shortURL', (req,res) => {
  *  POST '/urls/:shortURL' --> Update Url
  */
 app.post('/urls/:shortURL', (req,res) => {
+  const userID = req.cookies('user_id');
   const shortURL = req.params.shortURL;
   const longURL = req.body.longURL;
-  urlDatabase[shortURL] = longURL;
+  console.log("urlDatabase before adding url :",urlDatabase)
+  urlDatabase[shortURL] = {longURL,userID};
+  console.log("urlDatabase After adding url :",urlDatabase)
   res.redirect("/urls");
 })
 /** 
