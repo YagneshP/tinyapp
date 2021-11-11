@@ -209,14 +209,16 @@ app.get('/urls/:shortURL', (req,res) => {
  *  POST '/urls/:shortURL' --> Update Url
  */
 app.post('/urls/:shortURL', (req,res) => {
-  const userID = req.cookies('user_id');
+  const userID = req.cookies['user_id'];
   const shortURL = req.params.shortURL;
   const longURL = req.body.longURL;
   const user = users[userID];
   if(user){
-    if(urlDatabase.hasOwnProperty(shortURL)){
-      urlDatabase[shortURL] = {longURL,userID};
-      return res.redirect("/urls");
+    if(shortURL && urlDatabase.hasOwnProperty(shortURL)){
+      if(urlDatabase[shortURL]['userID'] === userID) {
+        urlDatabase[shortURL] = {longURL,userID};
+        return res.redirect("/urls");
+      }
     }
     return res.send('shortUrl not found!');
   }
