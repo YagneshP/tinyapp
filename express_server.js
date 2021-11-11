@@ -26,6 +26,17 @@ function checkUserWithEmail(email) {
   }
   return false;
 }
+
+function urlsForUser(id) {
+  let obj = {};
+  for(key in urlDatabase){
+    console.log('key',key);
+    if(urlDatabase[key]['userID'] === id){
+      obj[key] = urlDatabase[key]
+    }
+  }
+  return obj;
+}
 //userDatabase
 const users = { 
   "userRandomID": {
@@ -74,8 +85,11 @@ app.get('/urls.json', (req, res) => {
 app.get('/urls', (req,res) => {
   const userId = req.cookies['user_id'];
   const user = users[userId];
-  const templateVars = {urls : urlDatabase, user};
-  res.render('urls_index', templateVars);
+  if(user){
+    const templateVars = {urls : urlsForUser(user['id']), user};
+    return res.render('urls_index', templateVars);
+  }
+  return res.redirect('/login');
 });
 
 /** 
