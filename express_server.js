@@ -41,8 +41,14 @@ const users = {
 }
 //urlDataBase
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  b6UTxQ: {
+      longURL: "https://www.tsn.ca",
+      userID: "aJ48lW"
+  },
+  i3BoGr: {
+      longURL: "https://www.google.ca",
+      userID: "aJ48lW"
+  }
 };
 
 /**
@@ -147,7 +153,9 @@ app.post('/urls', (req, res) => {
   const user = users[userId];
   if(user){
     const newShortUrl = generateRandomString();
-    urlDatabase[newShortUrl] = req.body.longURL;
+    const longURL = req.body.longURL;
+    const userID = user['id'];
+    urlDatabase[newShortUrl] = {longURL,userID};
     return res.redirect(`/urls/${newShortUrl}`); 
   }
   return res.status(401).send('Unathorized client').redirect("/login");
