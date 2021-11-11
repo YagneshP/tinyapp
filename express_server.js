@@ -30,7 +30,6 @@ function checkUserWithEmail(email) {
 function urlsForUser(id) {
   let obj = {};
   for(key in urlDatabase){
-    console.log('key',key);
     if(urlDatabase[key]['userID'] === id){
       obj[key] = urlDatabase[key]
     }
