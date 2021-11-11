@@ -105,6 +105,7 @@ app.get('/urls', (req,res) => {
  app.get('/register', (req,res) => {
   const userId = req.cookies['user_id'];
   const user = users[userId];
+  //if loggedIn dont show register page ??
   res.render('registrationForm',{user});
 });
 
@@ -114,6 +115,7 @@ app.get('/urls', (req,res) => {
  app.get('/login', (req,res) => {
   const userId = req.cookies['user_id'];
   const user = users[userId];
+  //if loggedIn dont show login page ??
   res.render('logInform',{user});
 });
 
@@ -141,9 +143,14 @@ app.get('/urls', (req,res) => {
  *  POST '/urls' --> Create new url
  */
 app.post('/urls', (req, res) => {
-  const newShortUrl = generateRandomString();
-  urlDatabase[newShortUrl] = req.body.longURL;
-  res.redirect(`/urls/${newShortUrl}`)
+  const userId = req.cookies['user_id'];
+  const user = users[userId];
+  if(user){
+    const newShortUrl = generateRandomString();
+    urlDatabase[newShortUrl] = req.body.longURL;
+    return res.redirect(`/urls/${newShortUrl}`); 
+  }
+  return res.status(401).send('Unathorized client').redirect("/login");
 });
 /** 
  *  GET '/urls/new' --> Read New URLForm
@@ -151,8 +158,11 @@ app.post('/urls', (req, res) => {
 app.get('/urls/new', (req, res) => {
   const userId = req.cookies['user_id'];
   const user = users[userId];
-  res.render('urls_new',{user});
-} )
+  if(user){
+    return res.render('urls_new',{user});
+  }
+  return res.status(401).send('Unathorized client').redirect("/login");
+});
 /** 
  *  GET '/urls/:id' --> Read Show Page of particular url
  */
