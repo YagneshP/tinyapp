@@ -239,7 +239,7 @@ app.get('/u/:shortURL', (req,res) => {
  */
 app.post('/urls/:shortURL/delete', (req, res) => {
   //check if user there
-  const userID = req.cookies('user_id');
+  const userID = req.cookies['user_id'];
   const user = users[userID];
   if (user) {
     const shortURL = req.params.shortURL;
