@@ -77,11 +77,15 @@ app.get('/urls', (req,res) => {
  */
  app.post('/login', (req,res) => {
   const {email,password} = req.body;
-  if(checkEmail){
-
+  const user  = checkUserWithEmail(email);
+  if (user) {
+    if (user["password"] === password) {
+      res.cookie('user_id', user['id']);
+      return res.redirect('/urls');
+    }
+    return res.status(403).send(`Password doesn't match`);
   }
-  res.cookie('username', username);
-  res.redirect('/urls');
+  return res.status(403).send('Email not found');
 });
 
 /** 
