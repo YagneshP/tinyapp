@@ -199,10 +199,14 @@ app.post('/urls/:shortURL', (req,res) => {
   const userID = req.cookies('user_id');
   const shortURL = req.params.shortURL;
   const longURL = req.body.longURL;
-  console.log("urlDatabase before adding url :",urlDatabase)
-  urlDatabase[shortURL] = {longURL,userID};
-  console.log("urlDatabase After adding url :",urlDatabase)
-  res.redirect("/urls");
+  const user = users[userID];
+  if(user){
+    if(urlDatabase.hasOwnProperty(shortURL)){
+      urlDatabase[shortURL] = {longURL,userID};
+      return res.redirect("/urls");
+    }
+  }
+  return res.send('Unauthorized user');
 })
 /** 
  *  GET '/u/:shortURL' --> Redirect to longURL
