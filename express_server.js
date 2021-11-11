@@ -169,17 +169,28 @@ app.get('/urls/new', (req, res) => {
   if(user){
     return res.render('urls_new',{user});
   }
-  return res.status(401).send('Unathorized client').redirect("/login");
+  return res.status(401).send('Unathorized client');
 });
 /** 
  *  GET '/urls/:id' --> Read Show Page of particular url
  */
 app.get('/urls/:shortURL', (req,res) => {
-  const userId = req.cookies['user_id'];
-  const user = users[userId];
+  const user = users[req.cookies['user_id']];
   const shortURL = req.params.shortURL;
-  const longURL = urlDatabase[shortURL];
-  res.render('urls_show', {shortURL, longURL,user});
+  //check if user loggedIn
+  if(user){
+    //check if shortURL in the urlDB
+    if(urlDatabase.hasOwnProperty(shortURL)){
+      const {longURL,userID}= urlDatabase[shortURL];
+      // check if shortURL owns by loggedIn user
+      if(userID === user.id){
+        return res.render('urls_show', {shortURL, longURL,user});
+      }
+      return res.status(401).send('Unathorized client').redirect("/login");
+    }
+    return res.send('shortURL not found');
+  }
+  return res.send('User not logged in');
 });
 /** 
  *  POST '/urls/:shortURL' --> Update Url
