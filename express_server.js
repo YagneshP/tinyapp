@@ -129,10 +129,8 @@ app.get('/urls', (req,res) => {
       const user = {id, email, password};
       users[id] = user;
       res.cookie('user_id', id);
-      console.log("Users after creatin user", users)
       return res.redirect('/urls');
     };
-    console.log("if email exist Users :", users)
     return res.status(400).send('Email already exists');
   }
   return res.status(400).send('email and password can not be empty');
