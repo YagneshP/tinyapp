@@ -1,13 +1,16 @@
 const express = require('express');
 const app = express();
-const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 const bcrypt = require('bcryptjs');
 const PORT = 8080;
 
 app.set('view engine','ejs');
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-app.use(cookieParser()) // using cookieParser middleware
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1','key2']
+}))
 
 //random string generator
 function generateRandomString() {
@@ -78,7 +81,7 @@ app.get('/urls.json', (req, res) => {
  *  GET '/urls' --> index page of URLs
  */
 app.get('/urls', (req,res) => {
-  const userId = req.cookies['user_id'];
+  const userId = req.session.user_id;
   const user = users[userId];
   if(user){
     const templateVars = {urls : urlsForUser(user['id']), user};
@@ -99,7 +102,7 @@ app.get('/urls', (req,res) => {
 
       const isCorrectPassword = bcrypt.compareSync(password, user['password']);
       if (isCorrectPassword) {
-        res.cookie('user_id', user['id']);
+        req.session.user_id = user['id'];
         return res.redirect('/urls');
       }
       return res.status(403).send(`Password doesn't match`);
@@ -113,7 +116,7 @@ app.get('/urls', (req,res) => {
  *  POST '/logout' --> logout user by clear cookie
  */
  app.post('/logout', (req,res) => {
-  res.clearCookie('user_id');
+  req.session = null;
   res.redirect('/urls');
 });
 
@@ -121,7 +124,7 @@ app.get('/urls', (req,res) => {
  *  GET '/register' --> render Registration form
  */
  app.get('/register', (req,res) => {
-  const userId = req.cookies['user_id'];
+  const userId = req.session.user_id;
   const user = users[userId];
   //if loggedIn dont show register page ??
   res.render('registrationForm',{user});
@@ -131,7 +134,7 @@ app.get('/urls', (req,res) => {
  *  GET '/login' --> render login form
  */
  app.get('/login', (req,res) => {
-  const userId = req.cookies['user_id'];
+  const userId = req.session.user_id;
   const user = users[userId];
   //if loggedIn dont show login page ??
   res.render('logInform',{user});
@@ -149,10 +152,8 @@ app.get('/urls', (req,res) => {
       //hashing password
       const hashedPassword = bcrypt.hashSync(password, 10);
       const user = {id, email, password:hashedPassword};
-      console.log('Register user:', user);
       users[id] = user;
-      console.log('Register Users:', users)
-      res.cookie('user_id', id);
+      req.session.user_id = id
       return res.redirect('/urls');
     };
     return res.status(400).send('Email already exists');
@@ -165,13 +166,14 @@ app.get('/urls', (req,res) => {
  *  POST '/urls' --> Create new url
  */
 app.post('/urls', (req, res) => {
-  const userId = req.cookies['user_id'];
+  const userId = req.session.user_id;
   const user = users[userId];
   if(user){
     const newShortUrl = generateRandomString();
     const longURL = req.body.longURL;
     const userID = user['id'];
     urlDatabase[newShortUrl] = {longURL,userID};
+    console.log('After creating new url urlDatabase:', urlDatabase);
     return res.redirect(`/urls/${newShortUrl}`); 
   }
   return res.status(401).send('Unathorized client').redirect("/login");
@@ -180,7 +182,7 @@ app.post('/urls', (req, res) => {
  *  GET '/urls/new' --> Read New URLForm
  */
 app.get('/urls/new', (req, res) => {
-  const userId = req.cookies['user_id'];
+  const userId = req.session.user_id;
   const user = users[userId];
   if(user){
     return res.render('urls_new',{user});
@@ -191,7 +193,7 @@ app.get('/urls/new', (req, res) => {
  *  GET '/urls/:id' --> Read Show Page of particular url
  */
 app.get('/urls/:shortURL', (req,res) => {
-  const user = users[req.cookies['user_id']];
+  const user = users[req.session.user_id];
   const shortURL = req.params.shortURL;
   //check if user loggedIn
   if(user){
@@ -212,7 +214,8 @@ app.get('/urls/:shortURL', (req,res) => {
  *  POST '/urls/:shortURL' --> Update Url
  */
 app.post('/urls/:shortURL', (req,res) => {
-  const userID = req.cookies['user_id'];
+  // const userID = req.cookies['user_id'];
+  const userID = req.session.user_id;
   const shortURL = req.params.shortURL;
   const longURL = req.body.longURL;
   const user = users[userID];
@@ -231,7 +234,7 @@ app.post('/urls/:shortURL', (req,res) => {
  *  GET '/u/:shortURL' --> Redirect to longURL
  */
 app.get('/u/:shortURL', (req,res) => {
-  if(!urlDatabase.hasOwnProperty(req.params.shortURL)){
+  if(urlDatabase.hasOwnProperty(req.params.shortURL)){
     const {longURL} = urlDatabase[req.params.shortURL];
     return res.redirect(longURL);
   }
@@ -242,7 +245,7 @@ app.get('/u/:shortURL', (req,res) => {
  */
 app.post('/urls/:shortURL/delete', (req, res) => {
   //check if user there
-  const userID = req.cookies['user_id'];
+  const userID = req.session.user_id;
   const user = users[userID];
   if (user) {
     const shortURL = req.params.shortURL;
