@@ -220,9 +220,19 @@ app.get('/u/:shortURL', (req,res) => {
  *  POST '/urls/:shortURL' --> Delete URL
  */
 app.post('/urls/:shortURL/delete', (req, res) => {
-  const shortURL = req.params.shortURL;
-  delete urlDatabase[shortURL];
-  res.redirect('/urls');
+  //check if user there
+  const userID = req.cookies('user_id');
+  const user = users[userID];
+  if (user) {
+    const shortURL = req.params.shortURL;
+    // if user authorized to delete
+    if(urlDatabase[shortURL]['userID'] === userID) {
+      delete urlDatabase[shortURL];
+      return res.redirect('/urls');
+    }
+    return res.send('Unauthorized user');
+  }
+  return res.redirect("/login");
 });
 /** 
  *  GET '/hello' --> sending HTML data
