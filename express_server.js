@@ -24,7 +24,7 @@ function generateRandomString() {
 
 function checkUserWithEmail(email, db) {
   for(let user in db) {
-    if(db[user][email]) {
+    if(db[user]['email'] === email) {
       return db[user];
     }
   }
@@ -95,10 +95,8 @@ app.get('/urls', (req,res) => {
  app.post('/login', (req,res) => {
   const {email,password} = req.body;
   if(email && password){
-    const user  = checkUserWithEmail(email);
+    const user  = checkUserWithEmail(email,users);
     if (user) {
-      console.log('login user:', user);
-
       const isCorrectPassword = bcrypt.compareSync(password, user['password']);
       if (isCorrectPassword) {
         req.session.user_id = user['id'];
@@ -146,7 +144,7 @@ app.get('/urls', (req,res) => {
   //create user object
   const {email, password} = req.body;
   if(email && password) {
-    if (!checkUserWithEmail(email)) {
+    if (!checkUserWithEmail(email,users)) {
       const id = generateRandomString();
       //hashing password
       const hashedPassword = bcrypt.hashSync(password, 10);
