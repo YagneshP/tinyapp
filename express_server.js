@@ -22,13 +22,12 @@ function generateRandomString() {
   return result;
 }
 
-function checkUserWithEmail(email) {
-  for(let user in users) {
-    if(users[user]['email'] === email) {
-      return users[user];
+function checkUserWithEmail(email, db) {
+  for(let user in db) {
+    if(db[user][email]) {
+      return db[user];
     }
   }
-  return false;
 }
 
 function urlsForUser(id) {
