@@ -100,7 +100,8 @@ app.get('/urls', (req,res) => {
   if(email && password){
     const user  = checkUserWithEmail(email);
     if (user) {
-      if (user["password"] === password) {
+      const isCorrectPassword = bcrypt.compareSync(password, hashedPassword)
+      if (isCorrectPassword) {
         res.cookie('user_id', user['id']);
         return res.redirect('/urls');
       }
