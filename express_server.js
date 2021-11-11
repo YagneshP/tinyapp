@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const cookieParser = require('cookie-parser');
+const bcrypt = require('bcryptjs');
 const PORT = 8080;
 
 app.set('view engine','ejs');
@@ -147,7 +148,10 @@ app.get('/urls', (req,res) => {
   if(email && password) {
     if (!checkUserWithEmail(email)) {
       const id = generateRandomString();
-      const user = {id, email, password};
+      //hashing password
+      const hashedPassword = bcrypt.hashSync(password, 10);
+
+      const user = {id, email, password:hashedPassword};
       users[id] = user;
       res.cookie('user_id', id);
       return res.redirect('/urls');
