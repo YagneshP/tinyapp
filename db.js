@@ -22,10 +22,10 @@ const urlDatabase = {
     longURL: "https://www.google.ca",
     userID: "JqeVGE",
   },
-  eq62GE: { 
-    longURL: 'https://www.freecodecamp.org/', 
-    userID: 'euU9km' 
+  eq62GE: {
+    longURL: 'https://www.freecodecamp.org/',
+    userID: 'euU9km'
   }
 };
 
-module.exports = {users, urlDatabase}
+module.exports = {users, urlDatabase};
