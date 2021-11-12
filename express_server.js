@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const morgan = require('morgan');
 const cookieSession = require("cookie-session");
 const bcrypt = require("bcryptjs");
 const { checkUserWithEmail, urlsForUser, generateRandomString } = require("./helper");
@@ -8,6 +9,7 @@ const PORT = 8080;
 
 app.set("view engine", "ejs");
 app.use(express.json());
+app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cookieSession({
@@ -33,11 +35,11 @@ app.get("/", (req, res) => {
 app.get("/urls", (req, res) => {
   const userId = req.session.userID;
   const user = users[userId];
-  if (user) {
-    const templateVars = { urls: urlsForUser(user["id"], urlDatabase), user };
-    return res.render("urls_index", templateVars);
+  if (!user) {
+    return res.redirect("/login");
   }
-  return res.redirect("/login");
+  const templateVars = { urls: urlsForUser(user["id"], urlDatabase), user };
+  return res.render("urls_index", templateVars);
 });
 
 /**
