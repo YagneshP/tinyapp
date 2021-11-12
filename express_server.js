@@ -3,6 +3,7 @@ const app = express();
 const cookieSession = require("cookie-session");
 const bcrypt = require("bcryptjs");
 const { checkUserWithEmail, urlsForUser, generateRandomString } = require("./helper");
+const { users, urlDatabase } = require("./db");
 const PORT = 8080;
 
 app.set("view engine", "ejs");
@@ -15,35 +16,12 @@ app.use(
   })
 );
 
-
-
-//userDatabase
-const users = {
-  JqeVGE: {
-    id: "JqeVGE",
-    email: "test@test.com",
-    password: "$2a$10$0NRCRUOpGjbBnpgjQPQdc.wkunDCEEMvBJihg4trciirAOLs8VYMe",
-  },
-};
-//urlDataBase
-const urlDatabase = {
-  b6UTxQ: {
-    longURL: "https://www.tsn.ca",
-    userID: "aJ48lW",
-  },
-  i3BoGr: {
-    longURL: "https://www.google.ca",
-    userID: "aJ48lW",
-  },
-};
-
-/**
- * Routes
- */
+/***** Routes *****/
 
 /**
  *  GET '/' --> Home
  */
+
 app.get("/", (req, res) => {
   res.redirect("/urls");
 });
@@ -51,6 +29,7 @@ app.get("/", (req, res) => {
 /**
  *  GET '/urls' --> index page of URLs
  */
+
 app.get("/urls", (req, res) => {
   const userId = req.session.userID;
   const user = users[userId];
