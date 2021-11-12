@@ -84,8 +84,10 @@ app.post("/logout", (req, res) => {
 app.get("/register", (req, res) => {
   const userId = req.session.userID;
   const user = users[userId];
-  //if loggedIn dont show register page ??
-  res.render("registrationForm", { user });
+  if (user) {
+    return res.redirect("/urls");
+  }
+  return res.render("registrationForm", { user });
 });
 
 /**
@@ -94,8 +96,10 @@ app.get("/register", (req, res) => {
 app.get("/login", (req, res) => {
   const userId = req.session.userID;
   const user = users[userId];
-  //if loggedIn dont show login page ??
-  res.render("logInform", { user });
+  if (user) {
+    return res.redirect("/urls");
+  }
+  return res.render("logInform", { user });
 });
 
 /**
