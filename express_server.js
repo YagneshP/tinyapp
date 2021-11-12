@@ -122,6 +122,7 @@ app.post("/urls", (req, res) => {
     const longURL = req.body.longURL;
     const userID = user["id"];
     urlDatabase[newShortUrl] = { longURL, userID };
+    console.log(urlDatabase);
     return res.redirect(`/urls/${newShortUrl}`);
   }
   return res.status(401).send("Unathorized client").redirect("/login");
