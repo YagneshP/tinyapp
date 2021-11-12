@@ -55,11 +55,11 @@ app.post("/login", (req, res) => {
         req.session.userID = user["id"];
         return res.redirect("/urls");
       }
-      return res.status(403).send(`Password doesn't match`);
+      return res.status(403).send("<h4>Password doesn't match</h4>");
     }
-    return res.status(403).send("Email not found");
+    return res.status(403).send("<h4>Email not found</h4>");
   }
-  return res.status(400).send("email and password can not be empty");
+  return res.status(400).send("<h4>Email and Password can not be empty</h4>");
 });
 
 /**
@@ -106,9 +106,9 @@ app.post("/register", (req, res) => {
       req.session.userID = id;
       return res.redirect("/urls");
     }
-    return res.status(400).send("Email already exists");
+    return res.status(400).send("<h4>Email already exists</h4>");
   }
-  return res.status(400).send("email and password can not be empty");
+  return res.status(400).send("<h4>Email and Password can not be empty</h4>");
 });
 
 /**
@@ -124,7 +124,7 @@ app.post("/urls", (req, res) => {
     urlDatabase[newShortUrl] = { longURL, userID };
     return res.redirect(`/urls/${newShortUrl}`);
   }
-  return res.status(401).send("Unathorized client").redirect("/login");
+  return res.status(401).send("<h4>Unathorized client</h4>");
 });
 /**
  *  GET '/urls/new' --> Read New URLForm
@@ -172,10 +172,11 @@ app.post("/urls/:shortURL", (req, res) => {
         urlDatabase[shortURL] = { longURL, userID };
         return res.redirect("/urls");
       }
+      return res.send("<h4>Unauthorized User</h4>");
     }
-    return res.send("shortUrl not found!");
+    return res.send("<h4>Url not found!</h4>");
   }
-  return res.send("Unauthorized user");
+  return res.send("<h4>User not logged in</h4> <p><a href='/login'>Please LogIn</a></p>");
 });
 
 /**
@@ -186,7 +187,7 @@ app.get("/u/:shortURL", (req, res) => {
     const { longURL } = urlDatabase[req.params.shortURL];
     return res.redirect(longURL);
   }
-  return res.send("shortURL doesnt exist");
+  return res.send("<h4>URL doesn't exist</h4>");
 });
 
 /**
@@ -203,9 +204,9 @@ app.post("/urls/:shortURL/delete", (req, res) => {
       delete urlDatabase[shortURL];
       return res.redirect("/urls");
     }
-    return res.send("Unauthorized user");
+    return res.send("<h4>Unauthorized user</h4>");
   }
-  return res.redirect("/login");
+  return res.send("<h4>User not logged in</h4> <p><a href='/login'>Please LogIn</a></p>");
 });
 
 //Server Listen
