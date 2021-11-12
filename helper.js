@@ -6,4 +6,4 @@ function checkUserWithEmail(email, db) {
   }
 }
 
-module.exports = checkUserWithEmail;
+module.exports = {checkUserWithEmail};
