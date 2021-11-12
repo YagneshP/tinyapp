@@ -61,14 +61,9 @@ const urlDatabase = {
  *  GET '/' --> Home
  */
 app.get('/', (req,res) => {
-  res.send('Hello World');
+  res.redirect('/urls');
 });
-/** 
- *  GET '/urls.json' --> json urlDatabase
- */
-app.get('/urls.json', (req, res) => {
-  res.json(urlDatabase);
-});
+
 /** 
  *  GET '/urls' --> index page of URLs
  */
@@ -219,7 +214,8 @@ app.post('/urls/:shortURL', (req,res) => {
     return res.send('shortUrl not found!');
   }
   return res.send('Unauthorized user');
-})
+});
+
 /** 
  *  GET '/u/:shortURL' --> Redirect to longURL
  */
@@ -230,6 +226,7 @@ app.get('/u/:shortURL', (req,res) => {
   }
   return res.send('shortURL doesnt exist');
 });
+
 /** 
  *  POST '/urls/:shortURL' --> Delete URL
  */
@@ -247,12 +244,6 @@ app.post('/urls/:shortURL/delete', (req, res) => {
     return res.send('Unauthorized user');
   }
   return res.redirect("/login");
-});
-/** 
- *  GET '/hello' --> sending HTML data
- */
-app.get('/hello', (req,res) => {
-  res.send('<html><body>Hello <b>World</b></body></html>');
 });
 
 //Server Listen
