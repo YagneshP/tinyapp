@@ -36,7 +36,7 @@ app.get("/urls", (req, res) => {
   const userId = req.session.userID;
   const user = users[userId];
   if (!user) {
-    return res.redirect("/login");
+    return res.status(401).send('<h4>Unauthorized client</h4><p>Please <a href="/login">login</a> </p>');
   }
   const templateVars = { urls: urlsForUser(user["id"], urlDatabase), user };
   return res.render("urls_index", templateVars);
