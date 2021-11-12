@@ -1,15 +1,19 @@
 const express = require("express");
 const app = express();
-const morgan = require('morgan');
+const morgan = require("morgan");
 const cookieSession = require("cookie-session");
 const bcrypt = require("bcryptjs");
-const { checkUserWithEmail, urlsForUser, generateRandomString } = require("./helper");
+const {
+  checkUserWithEmail,
+  urlsForUser,
+  generateRandomString,
+} = require("./helper");
 const { users, urlDatabase } = require("./db");
 const PORT = 8080;
 
 app.set("view engine", "ejs");
 app.use(express.json());
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cookieSession({
@@ -36,7 +40,11 @@ app.get("/urls", (req, res) => {
   const userId = req.session.userID;
   const user = users[userId];
   if (!user) {
-    return res.status(401).send('<h4>Unauthorized client</h4><p>Please <a href="/login">login</a> </p>');
+    return res
+      .status(401)
+      .send(
+        '<h4>Unauthorized client</h4><p>Please <a href="/login">login</a> </p>'
+      );
   }
   const templateVars = { urls: urlsForUser(user["id"], urlDatabase), user };
   return res.render("urls_index", templateVars);
@@ -154,9 +162,13 @@ app.get("/urls/:shortURL", (req, res) => {
       }
       return res.status(401).send("<h4>Unathorized client</h4>");
     }
-    return res.send("<h4>User not logged in</h4> <p><a href='/login'>Please LogIn</a></p>");
+    return res.send(
+      "<h4>User not logged in</h4> <p><a href='/login'>Please LogIn</a></p>"
+    );
   }
-  return res.send("<h4>URL not found</h4> <p><a href='/urls'>Go to Home</a></p>");
+  return res.send(
+    "<h4>URL not found</h4> <p><a href='/urls'>Go to Home</a></p>"
+  );
 });
 /**
  *  POST '/urls/:shortURL' --> Update Url
@@ -176,7 +188,9 @@ app.post("/urls/:shortURL", (req, res) => {
     }
     return res.send("<h4>Url not found!</h4>");
   }
-  return res.send("<h4>User not logged in</h4> <p><a href='/login'>Please LogIn</a></p>");
+  return res.send(
+    "<h4>User not logged in</h4> <p><a href='/login'>Please LogIn</a></p>"
+  );
 });
 
 /**
@@ -206,7 +220,9 @@ app.post("/urls/:shortURL/delete", (req, res) => {
     }
     return res.send("<h4>Unauthorized user</h4>");
   }
-  return res.send("<h4>User not logged in</h4> <p><a href='/login'>Please LogIn</a></p>");
+  return res.send(
+    "<h4>User not logged in</h4> <p><a href='/login'>Please LogIn</a></p>"
+  );
 });
 
 //Server Listen
