@@ -6,4 +6,14 @@ function checkUserWithEmail(email, db) {
   }
 }
 
-module.exports = {checkUserWithEmail};
+function urlsForUser(id, db) {
+  let obj = {};
+  for (let key in db) {
+    if (db[key]['userID'] === id) {
+      obj[key] = db[key];
+    }
+  }
+  return obj;
+}
+
+module.exports = {checkUserWithEmail,urlsForUser};
