@@ -122,7 +122,6 @@ app.post("/urls", (req, res) => {
     const longURL = req.body.longURL;
     const userID = user["id"];
     urlDatabase[newShortUrl] = { longURL, userID };
-    console.log(urlDatabase);
     return res.redirect(`/urls/${newShortUrl}`);
   }
   return res.status(401).send("Unathorized client").redirect("/login");
@@ -136,7 +135,7 @@ app.get("/urls/new", (req, res) => {
   if (user) {
     return res.render("urls_new", { user });
   }
-  return res.status(401).send("Unathorized client");
+  return res.redirect("/login");
 });
 /**
  *  GET '/urls/:id' --> Read Show Page of particular url
@@ -144,20 +143,20 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls/:shortURL", (req, res) => {
   const user = users[req.session.userID];
   const shortURL = req.params.shortURL;
-  //check if user loggedIn
-  if (user) {
-    //check if shortURL in the urlDB
-    if (urlDatabase[shortURL]) {
+  //check if shortURL in the urlDB
+  if (urlDatabase[shortURL]) {
+    //check if user loggedIn
+    if (user) {
       const { longURL, userID } = urlDatabase[shortURL];
       // check if shortURL owns by loggedIn user
       if (userID === user.id) {
         return res.render("urls_show", { shortURL, longURL, user });
       }
-      return res.status(401).send("Unathorized client").redirect("/login");
+      return res.status(401).send("<h4>Unathorized client</h4>");
     }
-    return res.send("shortURL not found");
+    return res.send("<h4>User not logged in</h4> <p><a href='/login'>Please LogIn</a></p>");
   }
-  return res.send("User not logged in");
+  return res.send("<h4>URL not found</h4> <p><a href='/urls'>Go to Home</a></p>");
 });
 /**
  *  POST '/urls/:shortURL' --> Update Url
