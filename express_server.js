@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cookieSession = require("cookie-session");
 const bcrypt = require("bcryptjs");
-const { checkUserWithEmail, urlsForUser } = require("./helper");
+const { checkUserWithEmail, urlsForUser, generateRandomString } = require("./helper");
 const PORT = 8080;
 
 app.set("view engine", "ejs");
@@ -15,18 +15,7 @@ app.use(
   })
 );
 
-//random string generator
-const generateRandomString = function() {
-  let randomChars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
-  for (let i = 0; i < 6; i++) {
-    result += randomChars.charAt(
-      Math.floor(Math.random() * randomChars.length)
-    );
-  }
-  return result;
-};
+
 
 //userDatabase
 const users = {
@@ -192,7 +181,6 @@ app.get("/urls/:shortURL", (req, res) => {
  *  POST '/urls/:shortURL' --> Update Url
  */
 app.post("/urls/:shortURL", (req, res) => {
-  // const userID = req.cookies['userID'];
   const userID = req.session.userID;
   const shortURL = req.params.shortURL;
   const longURL = req.body.longURL;
